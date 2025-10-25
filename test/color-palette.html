@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Moments Color Palette</title>
+    <style>
+        :root {
+            /* 🌿 Primary theme colors (green family) */
+            --color-primary: #2e7d32;
+            /* rich forest green */
+            --color-primary-light: #60ad5e;
+            /* soft leaf green */
+            --color-primary-dark: #005005;
+            /* deep pine green */
+
+            /* 🩵 Accent / secondary colors (teal family) */
+            --color-secondary: #80cbc4;
+            /* soft teal */
+            --color-secondary-dark: #26a69a;
+            /* ocean teal */
+
+            /* 🌑 Backgrounds and surfaces (dark mode tones) */
+            --color-bg: #121212;
+            /* near-black background */
+            --color-surface: #1e1e1e;
+            /* charcoal gray surface / card background */
+
+            /* 📝 Text colors */
+            --color-text-primary: #ffffff;
+            /* pure white text */
+            --color-text-secondary: #b0b0b0;
+            /* muted gray text */
+
+            /* ⚠️ Status colors */
+            --color-error: #e57373;
+            /* soft coral red (error) */
+            --color-success: #81c784;
+            /* light mint green (success) */
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text-primary);
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            padding: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--color-primary-light);
+        }
+
+        .palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .color-card {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+            background-color: var(--color-surface);
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .color-card:hover {
+            transform: scale(1.03);
+        }
+
+        .swatch {
+            height: 80px;
+        }
+
+        .label {
+            padding: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .hex {
+            color: var(--color-text-secondary);
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Learning Moments Color Palette</h1>
+    <div class="palette">
+        <!-- Primary Colors -->
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-primary)"></div>
+            <div class="label">Primary<br /><span class="hex">#2e7d32</span></div>
+        </div>
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-primary-light)"></div>
+            <div class="label">Primary Light<br /><span class="hex">#60ad5e</span></div>
+        </div>
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-primary-dark)"></div>
+            <div class="label">Primary Dark<br /><span class="hex">#005005</span></div>
+        </div>
+
+        <!-- Secondary Colors -->
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-secondary)"></div>
+            <div class="label">Secondary<br /><span class="hex">#80cbc4</span></div>
+        </div>
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-secondary-dark)"></div>
+            <div class="label">Secondary Dark<br /><span class="hex">#26a69a</span></div>
+        </div>
+
+        <!-- Backgrounds -->
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-bg)"></div>
+            <div class="label">Background<br /><span class="hex">#121212</span></div>
+        </div>
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-surface)"></div>
+            <div class="label">Surface<br /><span class="hex">#1e1e1e</span></div>
+        </div>
+
+        <!-- Text Colors -->
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-text-primary)"></div>
+            <div class="label" style="color: black;">Text Primary<br /><span class="hex">#ffffff</span></div>
+        </div>
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-text-secondary)"></div>
+            <div class="label">Text Secondary<br /><span class="hex">#b0b0b0</span></div>
+        </div>
+
+        <!-- Status Colors -->
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-error)"></div>
+            <div class="label">Error<br /><span class="hex">#e57373</span></div>
+        </div>
+        <div class="color-card">
+            <div class="swatch" style="background-color: var(--color-success)"></div>
+            <div class="label">Success<br /><span class="hex">#81c784</span></div>
+        </div>
+    </div>
+</body>
+
+</html>
