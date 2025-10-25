@@ -1,7 +1,37 @@
 /*Reset Default Styling
 --------------------------------------------------------------*/
+
+:root {
+  /* 🌿 Primary theme colors (green family) */
+  --color-primary: #2e7d32; /* rich forest green */
+  --color-primary-light: #60ad5e; /* soft leaf green */
+  --color-primary-dark: #005005; /* deep pine green */
+
+  /* 🩵 Accent / secondary colors (teal family) */
+  --color-secondary: #80cbc4; /* soft teal */
+  --color-secondary-dark: #26a69a; /* ocean teal */
+
+  /* 🌑 Backgrounds and surfaces (dark mode tones) */
+  --color-bg: #121212; /* near-black background */
+  --color-surface: #1e1e1e; /* charcoal gray surface / card background */
+
+  /* 📝 Text colors */
+  --color-text-primary: #ffffff; /* pure white text */
+  --color-text-secondary: #b0b0b0; /* muted gray text */
+
+  /* ⚠️ Status colors */
+  --color-error: #e57373; /* soft coral red (error) */
+  --color-success: #81c784; /* light mint green (success) */
+}
+
+/* Apply global dark theme look */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
 html,
-body,
 div,
 span,
 applet,
@@ -124,4 +154,3 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-

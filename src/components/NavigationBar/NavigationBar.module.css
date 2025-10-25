@@ -1,0 +1,26 @@
+.navbar {
+  /* You can adjust background or elevation here if desired */
+  box-shadow: none;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+}
+
+.navLinks {
+  color: var(--color-secondary-dark);
+  display: flex;
+  gap: 1rem;
+}
+
+.navItem {
+  text-transform: none; /* prevent MUI from making button text ALL CAPS */
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.navItem:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
