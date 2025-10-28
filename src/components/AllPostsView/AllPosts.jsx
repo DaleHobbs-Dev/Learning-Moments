@@ -2,6 +2,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { getPostsWithTopics } from "../../services/posts.js";
+
+// import without braces since it's a default export
 import FilterPostsByTopic from "./FilterPostsByTopic.jsx";
 import SearchPostsByTitle from "./SearchPostsByTitle.jsx";
 import styles from "./AllPosts.module.css";
@@ -100,9 +102,11 @@ function AllPosts() {
       {/* Posts grid */}
       <Grid container spacing={3}>
         {filteredPosts.map((post) => (
+          // Transform each post into a card
           <Grid item xs={12} sm={6} md={4} key={post.id}>
             <Card className={styles.card}>
               <CardContent>
+                {/* Post title */}
                 <Typography
                   variant="h6"
                   component="div"
@@ -112,6 +116,7 @@ function AllPosts() {
                   {post.title}
                 </Typography>
 
+                {/* Topic chip */}
                 <Chip
                   label={post.topic?.name || "Untitled Topic"}
                   color="primary"
@@ -119,6 +124,7 @@ function AllPosts() {
                   className={styles.topicChip}
                 />
 
+                {/* Likes display */}
                 <Stack
                   direction="row"
                   alignItems="center"
@@ -126,6 +132,7 @@ function AllPosts() {
                   className={styles.likesRow}
                   sx={{ mt: 2 }}
                 >
+                  {/* Like icon and count */}
                   <FavoriteIcon color="error" fontSize="small" />
                   <Typography variant="body2" color="text.secondary">
                     {post.likesCount ?? 0}{" "}

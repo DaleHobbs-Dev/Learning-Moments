@@ -1,6 +1,7 @@
 import React from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
+// Component to filter posts by topic accepting props of topics, selectedTopic, and onTopicChange
 function FilterPostsByTopic({ topics = [], selectedTopic, onTopicChange }) {
   return (
     <FormControl fullWidth size="small">
