@@ -1,10 +1,19 @@
 import React from "react";
+import { useEffect } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
 import { Register } from "../components/auth/Register.jsx";
 import NavigationBar from "../components/NavigationBar/NavigationBar.jsx";
 import { AllPosts } from "../components/AllPostsView/AllPosts.jsx";
 
 export const ApplicationViews = () => {
+  const [currentUser, setCurrentUser] = React.useState({});
+
+  useEffect(() => {
+    const localLearningUser = localStorage.getItem("learning_user");
+    const learningUserObject = JSON.parse(localLearningUser);
+    setCurrentUser(learningUserObject);
+  }, []);
+
   return (
     <Routes>
       <Route

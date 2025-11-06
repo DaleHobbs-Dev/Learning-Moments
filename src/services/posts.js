@@ -1,7 +1,7 @@
-import { getAllTopics } from "./topics.js";
+import { getLikesByPostId } from "./likes";
 
 export const getAllPosts = async () => {
-    const response = await fetch("http://localhost:8088/Posts");
+    const response = await fetch("http://localhost:8088/posts");
     if (!response.ok) {
         throw new Error("Failed to fetch posts");
     }
@@ -9,10 +9,21 @@ export const getAllPosts = async () => {
 };
 
 export async function getPostsWithTopics() {
-    const [posts, topics] = await Promise.all([getAllPosts(), getAllTopics()]);
-    return posts.map(post => ({
-        ...post,
-        topic: topics.find(t => t.id === post.topic_id),
-        likesCount: post.likes?.length || 0,
-    }));
+    const response = await fetch("http://localhost:8088/posts?_expand=topic");
+    if (!response.ok) {
+        throw new Error("Failed to fetch posts with topics");
+    }
+    const posts = await response.json();
+
+    const postsWithLikes = await Promise.all(
+        posts.map(async (post) => {
+            const likes = await getLikesByPostId(post.id);
+            return {
+                ...post,
+                likes: likes.length,
+            };
+        })
+    );
+
+    return postsWithLikes;
 }

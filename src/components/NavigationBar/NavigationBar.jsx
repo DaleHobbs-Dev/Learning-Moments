@@ -2,6 +2,7 @@ import React from "react";
 import { AppBar, Toolbar, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import styles from "./NavigationBar.module.css";
+import AuthButton from "../auth/AuthButton";
 
 export default function NavigationBar() {
   return (
@@ -34,10 +35,10 @@ export default function NavigationBar() {
           <Button color="inherit" className={styles.navItem}>
             Profile
           </Button>
-          <Button color="inherit" className={styles.navItem}>
-            Login / Logout
-          </Button>
         </Box>
+        {/* right-aligned logout/login */}
+        <Box sx={{ flexGrow: 1 }} />
+        <AuthButton />
       </Toolbar>
     </AppBar>
   );
