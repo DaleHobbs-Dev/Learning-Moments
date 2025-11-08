@@ -4,11 +4,13 @@ import { Register } from "./components/auth/Register.jsx";
 import { Login } from "./components/auth/Login.jsx";
 import { Authorized } from "./views/Authorized.jsx";
 import { ApplicationViews } from "./views/ApplicationViews.jsx";
+import { CurrentUserProvider } from "./context/CurrentUserProvider.jsx";
 
 function App() {
   return (
-    <Routes>
-      {/* <Container maxWidth="sm">
+    <CurrentUserProvider>
+      <Routes>
+        {/* <Container maxWidth="sm">
           <Box sx={{ textAlign: "center", mt: 5 }}>
             <Typography variant="h4" gutterBottom>
               Welcome to My Learning App
@@ -18,17 +20,18 @@ function App() {
             </Button>
           </Box>
         </Container> */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route
-        path="*"
-        element={
-          <Authorized>
-            <ApplicationViews />
-          </Authorized>
-        }
-      />
-    </Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route
+          path="*"
+          element={
+            <Authorized>
+              <ApplicationViews />
+            </Authorized>
+          }
+        />
+      </Routes>
+    </CurrentUserProvider>
   );
 }
 

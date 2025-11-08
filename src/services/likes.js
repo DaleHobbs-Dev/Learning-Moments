@@ -15,3 +15,20 @@ export const getLikesByPostId = async (postId) => {
     }
     return response.json();
 }
+
+export const createLike = async (likeObject) => {
+    const response = await fetch("http://localhost:8088/userPostLikes", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(likeObject),
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to create like: ${response.status} ${errorText}`);
+    }
+
+    return response.json();
+}

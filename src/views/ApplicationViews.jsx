@@ -1,18 +1,19 @@
 import React from "react";
 import { useEffect } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
-import { Register } from "../components/auth/Register.jsx";
 import NavigationBar from "../components/NavigationBar/NavigationBar.jsx";
 import { AllPosts } from "../components/AllPostsView/AllPosts.jsx";
+import PostDetails from "../components/AllPostsView/PostDetails.jsx";
+import { useCurrentUser } from "../context/CurrentUserContext.js";
 
 export const ApplicationViews = () => {
-  const [currentUser, setCurrentUser] = React.useState({});
+  const { setCurrentUser } = useCurrentUser();
 
   useEffect(() => {
     const localLearningUser = localStorage.getItem("learning_user");
     const learningUserObject = JSON.parse(localLearningUser);
     setCurrentUser(learningUserObject);
-  }, []);
+  }, [setCurrentUser]);
 
   return (
     <Routes>
@@ -26,7 +27,11 @@ export const ApplicationViews = () => {
         }
       >
         {/* <Route path="/register" element={<Register />} /> */}
+        {/* Main feed */}
         <Route index element={<AllPosts />} />
+
+        {/* Post details page */}
+        <Route path="posts/:postId" element={<PostDetails />} />
         {/* Other routes can be added here */}
       </Route>
     </Routes>

@@ -35,8 +35,14 @@
 }
 
 .postDetailsCard {
+  max-width: 800px;
+  margin: 2rem auto;
   background-color: var(--color-surface);
-  color: var(--color-text-primary);
-  padding: 1rem;
-  margin-top: 1rem;
+}
+
+.postActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
