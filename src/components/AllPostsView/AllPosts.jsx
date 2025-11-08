@@ -1,7 +1,8 @@
 // View all posts with filtering and searching capabilities
-import React from "react";
 import { useState, useEffect } from "react";
 import { getPostsWithTopics } from "../../services/posts.js";
+import { Link } from "react-router-dom";
+import { useCurrentUser } from "../../context/CurrentUserContext.js";
 
 // import without braces since it's a default export
 import FilterPostsByTopic from "./FilterPostsByTopic.jsx";
@@ -22,6 +23,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 
 // Main AllPosts component
 function AllPosts() {
+  const currentUser = useCurrentUser();
+  console.log("Current User in AllPosts:", currentUser);
   // State management
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
@@ -109,9 +112,11 @@ function AllPosts() {
                 {/* Post title */}
                 <Typography
                   variant="h6"
-                  component="div"
+                  component={Link}
+                  to={`/posts/${post.id}`}
                   className={styles.title}
                   gutterBottom
+                  sx={{ display: "block" }}
                 >
                   {post.title}
                 </Typography>
@@ -135,8 +140,7 @@ function AllPosts() {
                   {/* Like icon and count */}
                   <FavoriteIcon color="error" fontSize="small" />
                   <Typography variant="body2" color="text.secondary">
-                    {post.likesCount ?? 0}{" "}
-                    {post.likesCount === 1 ? "Like" : "Likes"}
+                    {post.likes ?? 0} {post.likes === 1 ? "Like" : "Likes"}
                   </Typography>
                 </Stack>
               </CardContent>

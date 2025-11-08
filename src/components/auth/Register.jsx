@@ -1,21 +1,28 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import "./Login.css"
-import { createUser, getUserByEmail } from "../../services/userService"
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import {
+  Container,
+  Paper,
+  Box,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
+import { createUser, getUserByEmail } from "../../services/userService";
 
 export const Register = (props) => {
   const [user, setUser] = useState({
     email: "",
-    fullName: "",
+    name: "",
     cohort: 0,
-  })
-  let navigate = useNavigate()
+  });
+  let navigate = useNavigate();
 
   const registerNewUser = () => {
     const newUser = {
       ...user,
       cohort: parseInt(user.cohort),
-    }
+    };
 
     createUser(newUser).then((createdUser) => {
       if (createdUser.hasOwnProperty("id")) {
@@ -25,80 +32,126 @@ export const Register = (props) => {
             id: createdUser.id,
             staff: createdUser.isStaff,
           })
-        )
+        );
 
-        navigate("/")
+        navigate("/");
       }
-    })
-  }
+    });
+  };
 
   const handleRegister = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     getUserByEmail(user.email).then((response) => {
       if (response.length > 0) {
         // Duplicate email. No good.
-        window.alert("Account with that email address already exists")
+        window.alert("Account with that email address already exists");
       } else {
         // Good email, create user.
-        registerNewUser()
+        registerNewUser();
       }
-    })
-  }
+    });
+  };
 
   const updateUser = (evt) => {
-    const copy = { ...user }
-    copy[evt.target.id] = evt.target.value
-    setUser(copy)
-  }
+    const copy = { ...user };
+    copy[evt.target.id] = evt.target.value;
+    setUser(copy);
+  };
 
   return (
-    <main className="auth-container">
-      <form className="auth-form" onSubmit={handleRegister}>
-        <h1 className="header">Learning Moments</h1>
-        <h2>Please Register</h2>
-        <fieldset className="auth-fieldset">
-          <div>
-            <input
-              onChange={updateUser}
-              type="text"
-              id="fullName"
-              className="auth-form-input"
-              placeholder="Enter your name"
-              required
-              autoFocus
-            />
-          </div>
-        </fieldset>
-        <fieldset className="auth-fieldset">
-          <div>
-            <input
-              onChange={updateUser}
-              type="email"
-              id="email"
-              className="auth-form-input"
-              placeholder="Email address"
-              required
-            />
-          </div>
-        </fieldset>
-        <fieldset className="auth-fieldset">
-          <div>
-            <input
-              onChange={updateUser}
-              type="number"
-              id="cohort"
-              className="auth-form-input"
-              placeholder="Cohort #"
-              required
-            />
-          </div>
-        </fieldset>
-        <fieldset className="auth-fieldset">
-          <div>
-            <button type="submit">Register</button>
-          </div>
-        </fieldset>
-      </form>
-    </main>
-  )
-}
+    <Container maxWidth="xs" sx={{ mt: 8 }}>
+      <Paper
+        elevation={6}
+        sx={{
+          p: 4,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          backgroundColor: "background.paper",
+        }}
+      >
+        {/* App title */}
+        <Typography
+          variant="h4"
+          gutterBottom
+          color="primary.light"
+          sx={{ fontWeight: 600 }}
+        >
+          Learning Moments
+        </Typography>
+
+        {/* Subheader */}
+        <Typography variant="h6" gutterBottom color="text.secondary">
+          Please Register
+        </Typography>
+
+        {/* Registration form */}
+        <Box
+          component="form"
+          onSubmit={handleRegister}
+          noValidate
+          sx={{ mt: 2, width: "100%" }}
+        >
+          <TextField
+            id="name"
+            label="Full Name"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={user.name}
+            onChange={updateUser}
+            required
+            autoFocus
+          />
+
+          <TextField
+            id="email"
+            label="Email Address"
+            type="email"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={user.email}
+            onChange={updateUser}
+            required
+          />
+
+          <TextField
+            id="cohort"
+            label="Cohort Number"
+            type="number"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={user.cohort}
+            onChange={updateUser}
+            required
+          />
+
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 3 }}
+          >
+            Register
+          </Button>
+        </Box>
+      </Paper>
+
+      {/* Back to login link */}
+      <Box mt={2} textAlign="center">
+        <Typography variant="body2" color="text.secondary">
+          Already a member?{" "}
+          <Link
+            to="/login"
+            style={{ color: "#80cbc4", textDecoration: "none" }}
+          >
+            Sign in
+          </Link>
+        </Typography>
+      </Box>
+    </Container>
+  );
+};

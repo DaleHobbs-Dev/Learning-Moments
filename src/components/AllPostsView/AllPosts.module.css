@@ -16,7 +16,12 @@
 }
 
 .title {
-  font-weight: 600;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition: color 0.2s ease;
+}
+
+.title:hover {
   color: var(--color-primary-light);
 }
 
@@ -27,4 +32,17 @@
 
 .likesRow {
   margin-top: 0.75rem;
+}
+
+.postDetailsCard {
+  max-width: 800px;
+  margin: 2rem auto;
+  background-color: var(--color-surface);
+}
+
+.postActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
