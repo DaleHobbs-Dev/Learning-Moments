@@ -29,7 +29,7 @@ export default function NavigationBar() {
           <Button color="inherit" className={styles.navItem}>
             Favorites
           </Button>
-          <Button color="inherit" className={styles.navItem}>
+          <Button color="inherit" className={styles.navItem} component={Link} to="/new-post">
             New Post
           </Button>
           <Button color="inherit" className={styles.navItem}>

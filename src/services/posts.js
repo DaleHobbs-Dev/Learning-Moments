@@ -64,3 +64,17 @@ export async function getPostsWithTopicsLikesUsersByPostID(postId) {
         throw error;
     }
 }
+
+export const createPost = async (post) => {
+    const response = await fetch("http://localhost:8088/posts", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(post),
+    });
+    if (!response.ok) {
+        throw new Error("Failed to create new post");
+    }
+    return response.json();
+};
