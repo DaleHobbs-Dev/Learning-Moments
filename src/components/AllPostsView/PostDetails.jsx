@@ -74,6 +74,14 @@ export default function PostDetails() {
     return <Typography>Loading post...</Typography>;
   }
 
+  if (!post || !post.id) {
+    return (
+      <Typography color="error.main" variant="body1">
+        Sorry, this post could not be found.
+      </Typography>
+    );
+  }
+
   return (
     <Card className={styles.postDetailsCard}>
       <CardContent>
