@@ -9,12 +9,17 @@ import {
   Chip,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { getPostsWithTopicsLikesUsersByPostID } from "../../services/posts.js";
 import { useParams } from "react-router-dom";
 import { useCurrentUser } from "../../context/CurrentUserContext.js";
 import { createLike } from "../../services/likes.js";
 import { getLikesByPostId } from "../../services/likes.js";
+
+// Markdown imports
+import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
+import "highlight.js/styles/github.css"; // Choose your preferred style
 
 export default function PostDetails() {
   const { currentUser } = useCurrentUser();
@@ -24,26 +29,21 @@ export default function PostDetails() {
   const [userPostsLikes, setUserPostsLikes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // helper to fetch likes for this post
-  const getAndSetUserPostsLikes = useCallback(() => {
-    getLikesByPostId(postId)
-      .then((data) => setUserPostsLikes(data))
-      .catch((error) => console.error("Error fetching likes for post:", error));
-  }, [postId]);
-
-  // 1) fetch the post itself
+  // Fetch post and likes whenever postId changes
   useEffect(() => {
     setLoading(true);
+
+    // Fetch the post
     getPostsWithTopicsLikesUsersByPostID(postId)
       .then((data) => setPost(data))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
-  }, [postId]);
 
-  // 2) fetch likes for this post (run when postId changes / page loads)
-  useEffect(() => {
-    getAndSetUserPostsLikes();
-  }, [getAndSetUserPostsLikes]);
+    // Fetch likes for this post
+    getLikesByPostId(postId)
+      .then((data) => setUserPostsLikes(data))
+      .catch((error) => console.error("Error fetching likes for post:", error));
+  }, [postId]);
 
   const handleLike = () => {
     if (!currentUser) {
@@ -61,17 +61,30 @@ export default function PostDetails() {
 
     createLike(newLikeObject)
       .then(() => {
-        getAndSetUserPostsLikes();
+        // Refresh likes after creating a new one
+        getLikesByPostId(postId)
+          .then((data) => setUserPostsLikes(data))
+          .catch((error) =>
+            console.error("Error fetching likes for post:", error)
+          );
       })
       .catch((error) => console.error("Error creating like:", error));
   };
 
   const alreadyLiked = userPostsLikes.some(
-    (like) => like.userId === currentUser.id
+    (like) => like.userId === currentUser?.id
   );
 
   if (loading) {
     return <Typography>Loading post...</Typography>;
+  }
+
+  if (!post || !post.id) {
+    return (
+      <Typography color="error.main" variant="body1">
+        Sorry, this post could not be found.
+      </Typography>
+    );
   }
 
   return (
@@ -99,19 +112,46 @@ export default function PostDetails() {
           {post.user?.name}
         </Typography>
 
-        {/* --- Body --- */}
-        <Typography variant="body1" paragraph>
-          <Box
+        {/* --- Body with Markdown --- */}
+        <Box sx={{ mt: 2 }}>
+          <Typography
             component="span"
             sx={{ fontWeight: 600, color: "primary.light", mr: 1 }}
           >
             Content:
+          </Typography>
+          <Box
+            sx={{
+              mt: 1,
+              "& p": { margin: "0.5em 0" },
+              "& code": {
+                backgroundColor: "#f5f5f5",
+                padding: "2px 6px",
+                borderRadius: "3px",
+                fontSize: "0.9em",
+                fontFamily: "monospace",
+              },
+              "& pre": {
+                backgroundColor: "#f6f8fa",
+                padding: "16px",
+                borderRadius: "6px",
+                overflow: "auto",
+                margin: "1em 0",
+              },
+              "& pre code": {
+                backgroundColor: "transparent",
+                padding: 0,
+              },
+            }}
+          >
+            <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+              {post.body}
+            </ReactMarkdown>
           </Box>
-          {post.body}
-        </Typography>
+        </Box>
 
         {/* --- Topic --- */}
-        <Typography variant="subtitle1" gutterBottom>
+        <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>
           <Box
             component="span"
             sx={{

@@ -5,6 +5,7 @@ import NavigationBar from "../components/NavigationBar/NavigationBar.jsx";
 import { AllPosts } from "../components/AllPostsView/AllPosts.jsx";
 import PostDetails from "../components/AllPostsView/PostDetails.jsx";
 import { useCurrentUser } from "../context/CurrentUserContext.js";
+import NewPost from "../components/NewPost/NewPost.jsx";
 
 export const ApplicationViews = () => {
   const { setCurrentUser } = useCurrentUser();
@@ -32,6 +33,7 @@ export const ApplicationViews = () => {
 
         {/* Post details page */}
         <Route path="posts/:postId" element={<PostDetails />} />
+        <Route path="new-post" element={<NewPost />} />
         {/* Other routes can be added here */}
       </Route>
     </Routes>
