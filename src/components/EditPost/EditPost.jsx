@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useCurrentUser } from "../../context/CurrentUserContext.js";
+import { getPostsWithTopicsLikesUsersByPostID } from '../../services/posts.js';
+import { updatePost } from "../../services/posts.js";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAllTopics, createTopic } from "../../services/topics.js";
-import { createPost } from "../../services/posts.js";
-import { useNavigate } from "react-router-dom";
 
 // MUI imports
 import {
@@ -29,38 +30,51 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import "highlight.js/styles/github.css";
 
-// NewPost Component
-export default function NewPost() {
-  // Get current user info
-  const { currentUser } = useCurrentUser();
-  const userId = currentUser?.id;
+export default function EditPost() {
 
-  // Navigation hook for redirecting after post creation
+const { postId } = useParams();
+const { currentUser } = useCurrentUser();
+
+const [currentPost, setCurrentPost] = useState(null);
+const [updatedPost, setUpdatedPost] = useState({
+  title: "",
+  userId: null,
+  topicId: "",
+  body: "",
+  created: "",
+});
+const [topics, setTopics] = useState([]);
+const [newTopicData, setNewTopicData] = useState({ name: "", description: "" });
+const [loading, setLoading] = useState(false);
+const [previewOpen, setPreviewOpen] = useState(false);
+const userId = currentUser?.id || null;
+
+// Navigation hook for redirecting after post creation
   const navigate = useNavigate();
-
-  const [topics, setTopics] = useState([]);
-  const [selectedTopic, setSelectedTopic] = useState(null);
+  const [currentTopic, setCurrentTopic] = useState(null);
   const [successMsg, setSuccessMsg] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [newPostData, setNewPostData] = useState({
-    title: "",
-    userId: userId || "",
-    topicId: "",
-    body: "",
-    created: new Date().toISOString(),
-  });
-  const [newTopicData, setNewTopicData] = useState({
-    name: "",
-    description: "",
-  });
 
   // Update userId in newPostData when currentUser changes
   useEffect(() => {
-    if (userId) {
-      setNewPostData((prev) => ({ ...prev, userId }));
+    if (postId) {
+      setCurrentPost(null); // Reset currentPost while loading new data
+      getPostsWithTopicsLikesUsersByPostID(postId)
+        .then((post) => {
+          setCurrentPost(post);
+          setUpdatedPost({
+            title: post.title,
+            userId: post.userId,
+            topicId: post.topicId,
+            body: post.body,
+            created: post.created,
+          });
+          setCurrentTopic(post.topic || null);
+        })
+        .catch((error) => {
+          console.error("Error fetching post for editing:", error);
+        });
     }
-  }, [userId]);
+  }, [postId]);
 
   // Fetch all topics on component mount
   useEffect(() => {
@@ -79,11 +93,11 @@ export default function NewPost() {
       case "title":
       case "topicId":
       case "body":
-        setNewPostData((prev) => ({ ...prev, [name]: value }));
+        setUpdatedPost((prev) => ({ ...prev, [name]: value }));
 
         if (name === "topicId") {
           const selected = topics.find((t) => t.id === value);
-          setSelectedTopic(selected || null);
+          setCurrentTopic(selected || null);
         }
         break;
 
@@ -106,21 +120,21 @@ export default function NewPost() {
     setSuccessMsg("");
 
     // --- 1️⃣ Validate required fields ---
-    if (!newPostData.title.trim()) {
+    if (!updatedPost.title.trim()) {
       alert("Please enter a title for your post.");
       setLoading(false);
       return;
     }
 
-    if (!newPostData.body.trim()) {
+    if (!updatedPost.body.trim()) {
       alert("Please enter some content in the body.");
       setLoading(false);
       return;
     }
 
     if (
-      newPostData.topicId === "0" ||
-      (newPostData.topicId === "other" &&
+      updatedPost.topicId === "0" ||
+      (updatedPost.topicId === "other" &&
         (!newTopicData.name.trim() || !newTopicData.description.trim()))
     ) {
       alert(
@@ -131,7 +145,7 @@ export default function NewPost() {
     }
 
     try {
-      let topicIdToUse = newPostData.topicId;
+      let topicIdToUse = updatedPost.topicId;
 
       // --- 2️⃣ Create a new topic if needed ---
       if (topicIdToUse === "other") {
@@ -142,17 +156,17 @@ export default function NewPost() {
         topicIdToUse = topicResponse.id;
       }
 
-      // --- 3️⃣ Create the post ---
-      await createPost({
-        title: newPostData.title.trim(),
+      // --- 3️⃣ Update the post ---
+      await updatePost(postId, {
+        title: updatedPost.title.trim(),
         userId: userId,
         topicId: topicIdToUse,
-        body: newPostData.body.trim(),
+        body: updatedPost.body.trim(),
         created: new Date().toISOString(),
       });
 
       // --- 4️⃣ Success feedback + redirect ---
-      setSuccessMsg("Post created successfully! Redirecting...");
+      setSuccessMsg("Post updated successfully! Redirecting...");
       setTimeout(() => {
         setSuccessMsg("");
         navigate(`/my-posts`);
@@ -163,7 +177,7 @@ export default function NewPost() {
     }
 
     // --- 5️⃣ Reset form ---
-    setNewPostData({
+    setUpdatedPost({
       title: "",
       userId: userId,
       topicId: "0",
@@ -171,7 +185,7 @@ export default function NewPost() {
       created: new Date().toISOString(),
     });
     setNewTopicData({ name: "", description: "" });
-    setSelectedTopic(null);
+    setCurrentTopic(null);
     setLoading(false);
   };
 
@@ -182,6 +196,14 @@ export default function NewPost() {
   const handleClosePreview = () => {
     setPreviewOpen(false);
   };
+
+  if (!currentPost) {
+  return (
+    <Box p={4} textAlign="center">
+      <CircularProgress />
+    </Box>
+  );
+}
 
   return (
     <>
@@ -198,13 +220,11 @@ export default function NewPost() {
         }}
       >
         <Typography variant="h5" component="div" gutterBottom>
-          Create New Post
+          Edit Post
         </Typography>
 
         <Typography variant="body2" color="textSecondary" gutterBottom>
-          Choose a topic from the dropdown below or create a new topic. Then
-          fill out the title and body of your post before submitting. You can
-          use Markdown formatting in the body!
+          Update your post details below and click "Submit" to save changes.
         </Typography>
 
         {/* Text Input */}
@@ -212,7 +232,7 @@ export default function NewPost() {
           label="Title"
           variant="outlined"
           name="title"
-          value={newPostData.title}
+          value={updatedPost.title ?? ""}
           onChange={handleChange}
           fullWidth
           placeholder="Enter a Title for the Post"
@@ -225,7 +245,7 @@ export default function NewPost() {
             labelId="topic-label"
             label="Topic"
             name="topicId"
-            value={newPostData.topicId}
+            value={updatedPost.topicId ?? ""}
             onChange={handleChange}
           >
             <MenuItem value={0} disabled>
@@ -241,14 +261,13 @@ export default function NewPost() {
         </FormControl>
 
         {/* Topic description */}
-        {selectedTopic && newPostData.topicId !== "other" && (
+        {currentTopic && updatedPost.topicId !== "other" && (
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            {selectedTopic.description}
+            {currentTopic.description}
           </Typography>
         )}
-
         {/* Only show custom topic input if "Other" is chosen */}
-        {newPostData.topicId === "other" && (
+        {updatedPost.topicId === "other" && (
           <>
             <TextField
               label="Custom Topic"
@@ -279,7 +298,7 @@ export default function NewPost() {
           label="Body"
           variant="outlined"
           name="body"
-          value={newPostData.body}
+          value={updatedPost.body ?? ""}
           onChange={handleChange}
           fullWidth
           placeholder="Enter the content of the post (Markdown supported)"
@@ -296,7 +315,7 @@ export default function NewPost() {
             color="info"
             startIcon={<PreviewIcon />}
             onClick={handleOpenPreview}
-            disabled={!newPostData.body.trim()}
+            disabled={!updatedPost.body.trim()}
             sx={{ flex: 1 }}
           >
             Preview Post
@@ -348,7 +367,7 @@ export default function NewPost() {
             >
               Post Title:
             </Box>
-            {newPostData.title || "Untitled"}
+            {updatedPost.title || "Untitled"}
           </Typography>
 
           {/* Author Preview */}
@@ -395,13 +414,13 @@ export default function NewPost() {
               }}
             >
               <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
-                {newPostData.body || "*No content yet*"}
+                {updatedPost.body || "*No content yet*"}
               </ReactMarkdown>
             </Box>
           </Box>
 
           {/* Topic Preview */}
-          {(selectedTopic || newPostData.topicId === "other") && (
+          {(currentTopic || updatedPost.topicId === "other") && (
             <Typography variant="subtitle1" gutterBottom sx={{ mt: 2 }}>
               <Box
                 component="span"
@@ -415,9 +434,9 @@ export default function NewPost() {
               </Box>
               <Chip
                 label={
-                  newPostData.topicId === "other"
+                  updatedPost.topicId === "other"
                     ? newTopicData.name || "Custom Topic"
-                    : selectedTopic?.name || "No topic selected"
+                    : currentTopic?.name || "No topic selected"
                 }
                 color="primary"
                 size="small"
