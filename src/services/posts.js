@@ -98,3 +98,27 @@ export const createPost = async (post) => {
     }
     return response.json();
 };
+
+export const deletePost = async (postId) => {
+    const response = await fetch(`http://localhost:8088/posts/${postId}`, {
+        method: "DELETE",
+    });
+    if (!response.ok) {
+        throw new Error("Failed to delete post");
+    }
+    return response.json();
+};
+
+export const updatePost = async (postId, updatedPost) => {
+    const response = await fetch(`http://localhost:8088/posts/${postId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedPost),
+    });
+    if (!response.ok) {
+        throw new Error("Failed to update post");
+    }
+    return response.json();
+};
