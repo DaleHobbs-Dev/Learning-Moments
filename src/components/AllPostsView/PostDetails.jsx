@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom";
 import { useCurrentUser } from "../../context/CurrentUserContext.js";
 import { createLike } from "../../services/likes.js";
 import { getLikesByPostId } from "../../services/likes.js";
+import { useNavigate } from "react-router-dom";
 
 // Markdown imports
 import ReactMarkdown from "react-markdown";
@@ -24,6 +25,7 @@ import "highlight.js/styles/github.css"; // Choose your preferred style
 export default function PostDetails() {
   const { currentUser } = useCurrentUser();
   const { postId } = useParams();
+  const navigate = useNavigate();
 
   const [post, setPost] = useState({});
   const [userPostsLikes, setUserPostsLikes] = useState([]);
@@ -193,7 +195,13 @@ export default function PostDetails() {
 
           {/* If current user IS the author → show Edit button */}
           {currentUser?.id === post.userId && (
-            <Button variant="outlined" color="primary" onClick={() => {}}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => {
+                navigate(`/edit-post/${post.id}`);
+              }}
+            >
               Edit Post
             </Button>
           )}
