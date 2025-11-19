@@ -20,6 +20,7 @@ import {
   Stack,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
 // Main AllPosts component
 function AllPosts() {
@@ -79,34 +80,53 @@ function AllPosts() {
         All Posts
       </Typography>
 
-      <Grid
-        container
-        justifyContent={"space-between"}
-        alignItems={"center"}
-        sx={{ mb: 3 }}
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          zIndex: 20,
+          backgroundColor: "var(--mui-palette-background-default)",
+          paddingBottom: 2,
+          paddingTop: 2,
+        }}
       >
-        <Grid item xs={12} sm={6}>
-          {/* Topic filter dropdown */}
-          <FilterPostsByTopic
-            topics={topics}
-            selectedTopic={selectedTopic}
-            onTopicChange={setSelectedTopic}
-          />
+        <Grid
+          container
+          spacing={2}
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ mb: 3 }}
+        >
+          <Grid
+            size={{ xs: 12, sm: 6 }}
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            <FilterListIcon color="primary" sx={{ fontSize: 28 }} />
+            <Box className={styles.filterBox}>
+              <FilterPostsByTopic
+                topics={topics}
+                selectedTopic={selectedTopic}
+                onTopicChange={setSelectedTopic}
+              />
+            </Box>
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Box className={styles.filterBox}>
+              <SearchPostsByTitle
+                searchTerm={searchTerm}
+                onSearchTermChange={setSearchTerm}
+              />
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6}>
-          {/* Search bar */}
-          <SearchPostsByTitle
-            searchTerm={searchTerm}
-            onSearchTermChange={setSearchTerm}
-          />
-        </Grid>
-      </Grid>
+      </Box>
 
       {/* Posts grid */}
-      <Grid container spacing={3}>
+      <Grid container columns={12} spacing={3}>
         {filteredPosts.map((post) => (
           // Transform each post into a card
-          <Grid item xs={12} sm={6} md={4} key={post.id}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={post.id}>
             <Card className={styles.card}>
               <CardContent>
                 {/* Post title */}

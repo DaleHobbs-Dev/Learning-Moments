@@ -31,7 +31,12 @@ export default function NavigationBar() {
           >
             My Posts
           </Button>
-          <Button color="inherit" className={styles.navItem}>
+          <Button
+            color="inherit"
+            className={styles.navItem}
+            component={Link}
+            to="/my-favorites"
+          >
             Favorites
           </Button>
           <Button

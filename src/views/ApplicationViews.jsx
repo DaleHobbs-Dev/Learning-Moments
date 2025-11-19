@@ -8,6 +8,7 @@ import { useCurrentUser } from "../context/CurrentUserContext.js";
 import NewPost from "../components/NewPost/NewPost.jsx";
 import { MyPosts } from "../components/MyPosts/MyPosts.jsx";
 import EditPost from "../components/EditPost/EditPost.jsx";
+import MyFavorites from "../components/MyFavorites/MyFavorites.jsx";
 
 export const ApplicationViews = () => {
   const { setCurrentUser } = useCurrentUser();
@@ -38,6 +39,7 @@ export const ApplicationViews = () => {
         <Route path="new-post" element={<NewPost />} />
         <Route path="my-posts" element={<MyPosts />} />
         <Route path="edit-post/:postId" element={<EditPost />} />
+        <Route path="my-favorites" element={<MyFavorites />} />
         {/* Other routes can be added here */}
       </Route>
     </Routes>
