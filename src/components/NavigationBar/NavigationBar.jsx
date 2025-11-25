@@ -47,7 +47,12 @@ export default function NavigationBar() {
           >
             New Post
           </Button>
-          <Button color="inherit" className={styles.navItem}>
+          <Button
+            color="inherit"
+            className={styles.navItem}
+            component={Link}
+            to="/profile"
+          >
             Profile
           </Button>
         </Box>

@@ -7,7 +7,9 @@ import {
   Box,
   Button,
   Chip,
+  Link as MuiLink,
 } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useState, useEffect } from "react";
 import { getPostsWithTopicsLikesUsersByPostID } from "../../services/posts.js";
@@ -111,7 +113,14 @@ export default function PostDetails() {
           >
             Author:
           </Box>
-          {post.user?.name}
+          <MuiLink
+            component={RouterLink}
+            to={`/profile/${post.user?.id}`}
+            underline="hover"
+            color="inherit"
+          >
+            {post.user?.name}
+          </MuiLink>
         </Typography>
 
         {/* --- Body with Markdown --- */}
