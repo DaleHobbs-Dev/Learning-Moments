@@ -1,0 +1,100 @@
+/* =================== Container Wrapper =================== */
+.container {
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  color: var(--color-text-primary);
+}
+
+/* =================== Edit Card =================== */
+.editCard {
+  background-color: var(--color-surface);
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-primary-dark);
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 0 12px rgba(0, 255, 100, 0.15);
+  transition: box-shadow 0.25s ease;
+}
+
+.editCard:hover {
+  box-shadow: 0 0 20px rgba(0, 255, 100, 0.25);
+}
+
+/* =================== Heading =================== */
+.heading {
+  color: var(--color-primary-light);
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* =================== Form =================== */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* =================== Inputs =================== */
+.inputField .MuiInputLabel-root {
+  color: var(--color-text-secondary);
+}
+
+.inputField .MuiOutlinedInput-root {
+  color: var(--color-text-primary);
+}
+
+.inputField .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primary-dark);
+}
+
+/* Hover + focus glow */
+.inputField .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primary-light);
+}
+
+.inputField
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 6px rgba(0, 255, 100, 0.5);
+}
+
+/* =================== Buttons =================== */
+.buttonRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Save button */
+.saveBtn {
+  flex: 1;
+  background-color: var(--color-primary-dark) !important;
+  color: white !important;
+  font-weight: 600 !important;
+  transition: 0.2s ease !important;
+}
+
+.saveBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px rgba(46, 255, 120, 0.6);
+  background-color: var(--color-primary-light) !important;
+}
+
+/* Cancel button */
+.cancelBtn {
+  flex: 1;
+  border-color: var(--color-secondary) !important;
+  color: var(--color-secondary) !important;
+  font-weight: 600 !important;
+  transition: 0.2s ease !important;
+}
+
+.cancelBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  transform: scale(1.05);
+}

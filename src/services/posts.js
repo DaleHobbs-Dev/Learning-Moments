@@ -28,6 +28,26 @@ export async function getPostsWithTopics() {
     return postsWithLikes;
 }
 
+export async function getPostsByUserIdExpandUsers(userId) {
+    const response = await fetch(`http://localhost:8088/posts?_expand=topic&userId=${userId}`);
+    if (!response.ok) {
+        throw new Error("Failed to fetch posts with topics");
+    }
+    const posts = await response.json();
+
+    const postsWithLikes = await Promise.all(
+        posts.map(async (post) => {
+            const likes = await getLikesByPostId(post.id);
+            return {
+                ...post,
+                likes: likes.length,
+            };
+        })
+    );
+
+    return postsWithLikes;
+}
+
 export async function getPostsWithTopicsLikesUsers() {
     const response = await fetch("http://localhost:8088/posts?_expand=topic&_expand=user");
     if (!response.ok) {
